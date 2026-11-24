@@ -1,12 +1,3 @@
-"""
-fetch_metadata.py — System & Environment Diagnostic Script
-Data Science Club (DSC KLE) — Sprint Challenge Week 1
-
-Instructions for Recruits:
-1. Fill in your personal student metadata variables below.
-2. Complete the collect_environment_metadata() function.
-3. Run this script via: `python src/fetch_metadata.py`
-"""
 
 import sys
 import os
@@ -14,24 +5,15 @@ import platform
 from datetime import datetime, timezone
 import json
 
-# ==============================================================================
-# RECRUIT METADATA (Fill these in with your real details)
-# ==============================================================================
-STUDENT_USN = "01FEXXXXXXXX"        # e.g., "01FE25BCS122"
-STUDENT_NAME = "Your Full Name"     # e.g., "Ajay Mallappa"
-BRANCH = "CSE"                      # e.g., "CSE", "AI/DS", "ECE"
-TRACK = "CREDIT_TRACK_YEAR2"        # "CREDIT_TRACK_YEAR2" or "GROWTH_TRACK_YEAR1"
+
+STUDENT_USN = "01FE25BCI035"
+STUDENT_NAME = "VENKATRAM REDDY"
+BRANCH = "CSAI"
+TRACK = "CREDIT_TRACK_YEAR2"
 
 
-def collect_environment_metadata() -> dict:
-    """
-    Collects runtime diagnostic metadata from the host environment.
-    
-    Returns:
-        dict: Diagnostic details including python version, OS platform,
-              active virtualenv status, and ISO timestamp.
-    """
-    # Check if currently executing inside a virtual environment
+def collect_environment_metadata():
+
     is_in_venv = (
         hasattr(sys, 'real_prefix') or
         (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix)
@@ -44,6 +26,7 @@ def collect_environment_metadata() -> dict:
             "branch": BRANCH.strip(),
             "track": TRACK.strip()
         },
+
         "environment": {
             "python_version": sys.version.split()[0],
             "python_executable": sys.executable,
@@ -53,25 +36,27 @@ def collect_environment_metadata() -> dict:
             "timestamp_utc": datetime.now(timezone.utc).isoformat()
         }
     }
+
     return metadata
 
 
 def main():
+
     print("=" * 60)
-    print("DSC KLE — Week 1 Environment Verification")
+    print("DSC KLE - Week 1 Environment Verification")
     print("=" * 60)
 
     data = collect_environment_metadata()
 
-    # Validation guard for recruit details
-    if "XXXX" in data["student"]["usn"] or data["student"]["name"] == "Your Full Name":
-        print("\n⚠️ WARNING: Please update STUDENT_USN and STUDENT_NAME in src/fetch_metadata.py!")
+    if "XXXX" in data["student"]["usn"] or "ENTER_" in data["student"]["usn"] or "ENTER_" in data["student"]["name"]:
+        print("WARNING: Update your student details!")
     else:
-        print(f"\n[OK] Registered to: {data['student']['name']} ({data['student']['usn']})")
+        print("Registered:", data["student"]["name"])
+        print("USN:", data["student"]["usn"])
 
-    print(f"[OK] Python: {data['environment']['python_version']} on {data['environment']['os_platform']}")
-    print(f"[OK] Virtual Environment Active: {data['environment']['in_virtualenv']}")
-    print("\nFull System Metadata Payload:")
+    print("Python:", data["environment"]["python_version"])
+    print("Virtual Environment:", data["environment"]["in_virtualenv"])
+
     print(json.dumps(data, indent=2))
 
 
